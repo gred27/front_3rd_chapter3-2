@@ -109,6 +109,19 @@ export function formatDate(currentDate: Date, day?: number) {
   ].join('-');
 }
 
-export function isLeafYear(curruntDate: Date) {
+export function isLeafYear(currentDate: Date) {
+  const year = currentDate.getFullYear();
+
+  // 4로 나누어떨어지지 않으면 윤년이 아님
+  if (year % 4 !== 0) {
+    return false;
+  }
+
+  // 100으로 나누어떨어지지만 400으로 나누어떨어지지 않으면 윤년이 아님
+  if (year % 100 === 0 && year % 400 !== 0) {
+    return false;
+  }
+
+  // 나머지는 모두 윤년
   return true;
 }
