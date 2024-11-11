@@ -1,11 +1,59 @@
+import { ChakraProvider } from '@chakra-ui/react';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { ReactElement } from 'react';
 import { describe, it, expect } from 'vitest';
 
+import App from '../App';
+
+const setup = (element: ReactElement) => {
+  const user = userEvent.setup();
+
+  return { ...render(<ChakraProvider>{element}</ChakraProvider>), user };
+};
 describe('반복일정 test >', () => {
+  // default
+  describe('default >', () => {
+    it('반복 일정 클릭 시 하위 메뉴가 출력된다.', async () => {
+      const { user } = setup(<App />);
+
+      // 01. 초기 체크 여부 확인
+      // 쿼링의 세가지 방법 : getByRole, getByText, getByTestId
+      const checkbox = screen.getByRole('checkbox', { name: '반복 설정 반복 일정' });
+      expect(checkbox).toBeChecked();
+
+      // 02. 체크 -> 없는 거 확인
+      await user.click(checkbox);
+      // 반복 유형, 반복 간격, 반복 종료일 없는 지 테스트
+      expect(checkbox).not.toBeChecked();
+      expect(screen.queryByLabelText('반복 유형')).not.toBeInTheDocument();
+      expect(screen.queryByLabelText('반복 간격')).not.toBeInTheDocument();
+      expect(screen.queryByLabelText('반복 종료일')).not.toBeInTheDocument();
+
+      // 03. 체크 -> 있는 거 확인
+      await user.click(checkbox);
+    });
+  });
+
   // 1. 반복 유형 선택 테스트
   describe('반복 유형 선택', () => {
-    it('사용자가 일정 생성 또는 수정 시 반복 유형을 선택할 수 있다.', () => {});
+    it('반복유형 선택 옵션으로 매일, 매주, 매월, 매년이 존재한다.', () => {
+      setup(<App />);
+      // 반복 유형 옵션이 존재하는지 확인
+      expect(screen.getByText(/매일/i)).toBeInTheDocument();
+      expect(screen.getByText(/매주/i)).toBeInTheDocument();
+      expect(screen.getByText(/매월/i)).toBeInTheDocument();
+      expect(screen.getByText(/매년/i)).toBeInTheDocument();
+    });
+
+    it('사용자가 일정 생성 또는 수정 시 반복 유형을 선택할 수 있다.', async () => {
+      const { user } = setup(<App />);
+
+      await user.selectOptions(screen.getByRole('combobox', { name: '반복 유형' }), 'weekly');
+
+      // 선택한 값이 '매주'인지 확인
+      expect(screen.getByRole('combobox', { name: '반복 유형' })).toHaveValue('weekly');
+    });
   });
 
   // 2. 반복 간격 설정 테스트

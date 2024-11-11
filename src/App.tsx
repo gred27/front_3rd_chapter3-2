@@ -57,6 +57,22 @@ import {
 import { findOverlappingEvents } from './utils/eventOverlap';
 import { getTimeErrorMessage } from './utils/timeValidation';
 
+/**
+ * 반복일정 TODO
+ * 1. 윤년, 윤달 확인
+ *   -> 2.29 + 매년 -> 2.28, 윤년일 경우 2.29
+ *   -> 윤달 아닌 2.28 + 매년 -> 2.28, 윤년일 경우 2.29
+ *   -> 월말 31일(30일) + 매월 -> 각 월의 말일 (1.31, 2.28/ 2.29,3.31, 4.30 ...)
+ *
+ * 2. 반복 간격 계산
+ *  -> 2주 간격 이면 요일로 체크
+ *
+ * 3. 반복 일정임을 표시하는 UI 생성
+ * 4. 반복 완료 날짜 설정.
+ * 5. 일정 단일 수정, 단일 삭제, 전체 수정, 전체 삭제 api 만들기
+ *
+ */
+
 const categories = ['업무', '개인', '가족', '기타'];
 
 const weekDays = ['일', '월', '화', '수', '목', '금', '토'];
