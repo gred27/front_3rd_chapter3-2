@@ -9,6 +9,7 @@ import {
   getWeekDates,
   getWeeksAtMonth,
   isDateInRange,
+  isLeafYear,
 } from '../../utils/dateUtils';
 
 describe('getDaysInMonth', () => {
@@ -296,5 +297,24 @@ describe('formatDate', () => {
   it('일이 한 자리 수일 때 앞에 0을 붙여 포맷팅한다', () => {
     const testDate = new Date('2023-12-05');
     expect(formatDate(testDate)).toBe('2023-12-05');
+  });
+});
+
+describe('isLeafYear', () => {
+  it('현재 날짜의 해가 윤년이다', () => {
+    const testDate = new Date('2024-11-11');
+    expect(isLeafYear(testDate)).toBeTruthy();
+  });
+  it('2400년은 윤년이다', () => {
+    const testDate = new Date('2400-11-11');
+    expect(isLeafYear(testDate)).toBeTruthy();
+  });
+  it('2100년은 윤년이 아니다.', () => {
+    const testDate = new Date('2100-11-11');
+    expect(isLeafYear(testDate)).toBeFalsy();
+  });
+  it('2025년은 윤년이 아니다.', () => {
+    const testDate = new Date('2025-11-11');
+    expect(isLeafYear(testDate)).toBeFalsy();
   });
 });
