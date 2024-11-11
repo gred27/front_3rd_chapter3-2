@@ -40,10 +40,10 @@ describe('반복일정 test >', () => {
     it('반복유형 선택 옵션으로 매일, 매주, 매월, 매년이 존재한다.', () => {
       setup(<App />);
       // 반복 유형 옵션이 존재하는지 확인
-      expect(screen.getByText(/매일/i)).toBeInTheDocument();
-      expect(screen.getByText(/매주/i)).toBeInTheDocument();
-      expect(screen.getByText(/매월/i)).toBeInTheDocument();
-      expect(screen.getByText(/매년/i)).toBeInTheDocument();
+      expect(screen.getByText('매일')).toBeInTheDocument();
+      expect(screen.getByText('매주')).toBeInTheDocument();
+      expect(screen.getByText('매월')).toBeInTheDocument();
+      expect(screen.getByText('매년')).toBeInTheDocument();
     });
 
     it('사용자가 일정 생성 또는 수정 시 반복 유형을 선택할 수 있다.', async () => {
@@ -58,7 +58,14 @@ describe('반복일정 test >', () => {
 
   // 2. 반복 간격 설정 테스트
   describe('반복 간격 설정', () => {
-    it('사용자가 반복 간격을 설정할 수 있다.', () => {});
+    it('사용자가 반복 간격을 설정할 수 있다.', async () => {
+      const { user } = setup(<App />);
+
+      await user.clear(screen.getByLabelText('반복 간격'));
+      await user.type(screen.getByLabelText('반복 간격'), '2');
+
+      expect(screen.getByLabelText('반복 간격')).toHaveValue(2);
+    });
   });
 
   // 3. 반복 일정 표시 테스트
